@@ -15,7 +15,11 @@ const image_picker_options = {
   maxWidth: 480,
   quality: 1, 
   noData: false, 
-  path: 'images'
+  path: 'images',
+  width: 300,
+  height: 300,
+  cropping: true,
+  includeBase64: true
 };
 
 const api_key = '77879e7b4cae41f3baab52bf6ebad30d';

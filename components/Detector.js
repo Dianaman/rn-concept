@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Buffer } from 'buffer';
  
 import {
   AppRegistry,
@@ -24,8 +25,8 @@ export default class Detector extends Component {
     this.state = {
         photo_style: {
             position: 'relative',
-            width: 480,
-            height: 480
+            width: 300,
+            height: 300
         },
         has_photo: false,
         photo: null,
@@ -46,7 +47,7 @@ export default class Detector extends Component {
         </Image>
      
         <Button
-            text="Pick Photo"
+            text="Take Photo"
             onpress={this._pickImage.bind(this)}
             button_styles={styles.button}
             button_text_styles={styles.button_text} />
@@ -64,18 +65,12 @@ export default class Detector extends Component {
         face_data: null
     });
  
-    ImagePicker.openCamera(this.props.imagePickerOptions).then(response => {
-        let source = {uri: response.uri};
- 
+    ImagePicker.openCamera(this.props.imagePickerOptions).then(image => {
+        //const source = {uri: `data:${image.mime};base64,${(new Buffer(image.data)).toString('base64')}`};
+        const source = {uri: image.path}
         this.setState({
-          photo_style: {
-            position: 'relative',
-            width: response.width,
-            height: response.height
-          },
           has_photo: true,
-          photo: source,
-          photo_data: response.data
+          photo: source
         });
          
         
@@ -84,25 +79,11 @@ export default class Detector extends Component {
     });
  
   }
- 
-  _cropImage() {
-      ImagePicker.openCropper({
-        path: 'my-file-path.jpg',
-        width: 300,
-        height: 400
-    }).then(image => {
-        alert(image);
-        this.setState({
-            photo: image.source
-        })
-    }).catch(error => {
-        alert(error);
-    });
-  }
 
   _renderDetectFacesButton() {
     if(this.state.has_photo){
-        return  (
+        alert(this.state.photo.uri)
+        return  (            
             <Button
                 text="Detect Faces"
                 onpress={this._detectFaces.bind(this)}
